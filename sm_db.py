@@ -42,10 +42,10 @@ hst_data_sqls = {
     }
 }
 
-stock_info_sql = "INSERT INTO stocks_info VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT ON CONSTRAINT pk_si UPDATE set ( \
+stock_info_sql = "INSERT INTO stocks_info VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT ON CONSTRAINT pk_si DO UPDATE SET \
 name = EXCLUDED.name,\
 industry = EXCLUDED.industry,\
-area = EXCLUDED.are,\
+area = EXCLUDED.area,\
 pe = EXCLUDED.pe,\
 outstanding = EXCLUDED.outstanding,\
 totals = EXCLUDED.totals,\
@@ -64,7 +64,7 @@ rev = EXCLUDED.rev,\
 profit = EXCLUDED.profit,\
 gpr = EXCLUDED.gpr,\
 npr = EXCLUDED.npr,\
-holders = EXCLUDED.holders)"
+holders = EXCLUDED.holders"
 
 class smdb:
     #call this function before use db
@@ -91,8 +91,9 @@ class smdb:
 
     def update_stock_info_to_db(self, info):
         cursor = self.conn.cursor()
-        for code in info.index:
-            print(code)
+        for idx, row in info.iterrows():
+            print(row[:])
+            cursor.execute(stock_info_sql, row[:].tolist())
 
     def get_db_last_updated_date(self, ktype):
         cursor = self.conn.cursor()

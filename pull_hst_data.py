@@ -33,7 +33,12 @@ class hstdata:
                 #save to db
                 self.db.save_hst_data_to_db(df, ktype)
             self.db.commit()
-            
+
+    def pull_all_stocks(self):
+        info = ts.get_stock_basics()
+        self.db.update_stock_info_to_db(info)
+        self.db.commit()
+
 if __name__ == "__main__":
     #info = ts.get_stock_basics()
     #df = pull_hst_data("600228", "W", "2016-12-01", "2016-12-27")
@@ -45,4 +50,5 @@ if __name__ == "__main__":
     #for record in cursor:
     #    print(record)
     #print(get_db_last_updated_date(conn, ktype ='W'))
+    hst_data.pull_all_stocks()
     hst_data.get_all_stocks_hst_dat()
